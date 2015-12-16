@@ -18,6 +18,12 @@
 package imagetoolkit;
 
 import file.Image;
+import java.awt.image.BufferedImage;
+import javafx.stage.FileChooser;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.plaf.FileChooserUI;
+import utils.ImageUtils;
 
 /**
  *
@@ -25,11 +31,14 @@ import file.Image;
  */
 public class ImageToolkitMain extends javax.swing.JFrame {
     public static Image image;
+    private String filePath;
     /**
      * Creates new form ImageToolkitMain
      */
     public ImageToolkitMain() {
         initComponents();
+        if (!jTextField1.getText().isEmpty())
+            filePath = jTextField1.getText();
     }
 
     /**
@@ -45,6 +54,9 @@ public class ImageToolkitMain extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         jDialog1.setAlwaysOnTop(true);
 
@@ -61,7 +73,19 @@ public class ImageToolkitMain extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jTextField1.setText("C:\\Users\\Krystian\\Desktop\\lot1-16mpx.jpg");
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+
         jButton1.setText("Load");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("...");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -70,18 +94,38 @@ public class ImageToolkitMain extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Image");
+
+        jButton3.setText("Normalize");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Normalized");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(33, 33, 33)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addContainerGap(374, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel1)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jButton3))
+                .addContainerGap(616, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -90,8 +134,13 @@ public class ImageToolkitMain extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addContainerGap(417, Short.MAX_VALUE))
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addContainerGap(388, Short.MAX_VALUE))
         );
 
         pack();
@@ -99,7 +148,38 @@ public class ImageToolkitMain extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // Opening file chooser dialog
+        //jDialog1.setVisible(true);
+        //jDialog1.add(jFileChooser1);
+        jFileChooser1 = new JFileChooser();
+        int returnVal = jFileChooser1.showOpenDialog(this.getOwner());
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            filePath = jFileChooser1.getSelectedFile().toString();
+            jTextField1.setText(filePath);
+        }
+            
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // Loading file into image
+        image = new Image(filePath);
+        BufferedImage buffImg = image.getBufferedImage();
+        buffImg = ImageUtils.getScaledImage(buffImg, 400, 400);
+        
+        jLabel1.setIcon(new ImageIcon(buffImg));
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // Image normalization
+        BufferedImage normalizedImg = ImageUtils.histogramEqualization(image.getBufferedImage());
+        normalizedImg = ImageUtils.getScaledImage(normalizedImg, 400, 400);
+        jLabel2.setIcon(new ImageIcon(normalizedImg));
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -135,11 +215,15 @@ public class ImageToolkitMain extends javax.swing.JFrame {
             }
         });
     }
-
+    
+    private JFileChooser jFileChooser1;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JDialog jDialog1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

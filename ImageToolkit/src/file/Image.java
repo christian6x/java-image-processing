@@ -22,6 +22,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 
 /**
  *
@@ -39,9 +40,16 @@ public class Image {
         }
         image = img;
     }
-    
+     public BufferedImage getBufferedImage()
+    {
+        return image;
+    }   
     public Graphics getGraphics()
     {
         return image.getGraphics();
+    }
+    public Icon getImageAsIcon()
+    {
+        return (Icon) image;
     }
 }
